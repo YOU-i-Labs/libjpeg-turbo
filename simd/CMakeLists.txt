@@ -38,8 +38,11 @@ elseif(CPU_TYPE STREQUAL "i386")
   endif()
 endif()
 
-hunter_add_package(NASM)
-find_program(NASM_EXECUTABLE nasm HINTS ${NASM_ROOT}/bin NO_DEFAULT_PATH)
+find_program(NASM_EXECUTABLE nasm)
+if (NOT NASM_EXECUTABLE)
+  hunter_add_package(NASM)
+  find_program(NASM_EXECUTABLE nasm HINTS ${NASM_ROOT}/bin NO_DEFAULT_PATH)
+endif()
 
 enable_language(ASM_NASM)
 message(STATUS "CMAKE_ASM_NASM_COMPILER = ${CMAKE_ASM_NASM_COMPILER}")
