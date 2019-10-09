@@ -38,8 +38,11 @@ elseif(CPU_TYPE STREQUAL "i386")
   endif()
 endif()
 
-hunter_add_package(NASM)
-find_program(NASM_EXECUTABLE nasm HINTS ${NASM_ROOT}/bin NO_DEFAULT_PATH)
+find_program(NASM_EXECUTABLE nasm)
+if (NOT NASM_EXECUTABLE)
+  hunter_add_package(NASM)
+  find_program(NASM_EXECUTABLE nasm HINTS ${NASM_ROOT}/bin NO_DEFAULT_PATH)
+endif()
 
 if(NOT REQUIRE_SIMD)
   include(CheckLanguage)
