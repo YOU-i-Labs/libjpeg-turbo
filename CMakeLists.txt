@@ -45,6 +45,16 @@ message(STATUS "CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE}")
 message(STATUS "VERSION = ${VERSION}, BUILD = ${BUILD}")
 
 # Detect CPU type and whether we're building 64-bit or 32-bit code
+if(MSVC)
+  # workaround for CMake bug https://gitlab.kitware.com/cmake/cmake/issues/15170
+  if(CMAKE_SYSTEM_PROCESSOR STREQUAL "")
+    set(CMAKE_SYSTEM_PROCESSOR ${MSVC_CXX_ARCHITECTURE_ID})
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x64")
+      set(CMAKE_SYSTEM_PROCESSOR "x86_64")
+    endif()
+  endif()
+endif()
+
 math(EXPR BITS "${CMAKE_SIZEOF_VOID_P} * 8")
 string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} CMAKE_SYSTEM_PROCESSOR_LC)
 if(CMAKE_SYSTEM_PROCESSOR_LC MATCHES "x86_64" OR
